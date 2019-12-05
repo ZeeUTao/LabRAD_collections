@@ -18,32 +18,26 @@ import org.labrad.qubits.resources.AdcBoard;
 import org.labrad.qubits.resources.DacBoard;
 import org.labrad.qubits.resources.Resources;
 
-@ServerInfo(name = "Qubit Sequencer",
-		doc = "Builds and Runs qubit sequences"
-			+ "\n\n"
-			+ "This server is designed to help you build sequences to control the "
-			+ "numerous devices involved in a multi-qubit experiment.  In general, "
-			+ "this is complicated by the fact that the way the control sequence "
-			+ "is constructed depends on the wiring among all the various devices, "
-			+ "and by the fact that the sequence itself must be properly constructed "
-			+ "to ensure that all the boards run, stay in sync, and return timing "
-			+ "results as appropriate."
-			+ "\n\n"
-			+ "Information about the wiring setup (which should not change very often) "
-			+ "is loaded from the registry at ['', 'Servers', 'Qubit Server', 'Wiring'].  "
-			+ "Please do not nodify this directly, but rather use the 'WiringEditor.py' "
-			+ "script to make changes.  The wiring information is reloaded whenever this "
-			+ "registry entry is changed."
-			+ "\n\n"
-			+ "To build sequences, the setup is described as a list of devices, each "
-			+ "of which can have any number of channels.  These channels are one of a "
-			+ "small set of types, such as 'Iq' for microwaves or 'FastBias' for flux "
-			+ "or SQUID bias.  Many of the commands used to build up the sequence require "
-			+ "you to specify which channel or channels the command should affect.  "
-			+ "Channels are identified either by a pair of strings "
-			+ "(<device name>, <channel name>), or a single string <device name> "
-			+ "if the device has only one channel of the type needed for the command.")
-			public class QubitServer extends AbstractServer {
+@ServerInfo(name = "Qubit Sequencer", doc = "Builds and Runs qubit sequences" + "\n\n"
+		+ "This server is designed to help you build sequences to control the "
+		+ "numerous devices involved in a multi-qubit experiment.  In general, "
+		+ "this is complicated by the fact that the way the control sequence "
+		+ "is constructed depends on the wiring among all the various devices, "
+		+ "and by the fact that the sequence itself must be properly constructed "
+		+ "to ensure that all the boards run, stay in sync, and return timing " + "results as appropriate." + "\n\n"
+		+ "Information about the wiring setup (which should not change very often) "
+		+ "is loaded from the registry at ['', 'Servers', 'Qubit Server', 'Wiring'].  "
+		+ "Please do not nodify this directly, but rather use the 'WiringEditor.py' "
+		+ "script to make changes.  The wiring information is reloaded whenever this " + "registry entry is changed."
+		+ "\n\n" + "To build sequences, the setup is described as a list of devices, each "
+		+ "of which can have any number of channels.  These channels are one of a "
+		+ "small set of types, such as 'Iq' for microwaves or 'FastBias' for flux "
+		+ "or SQUID bias.  Many of the commands used to build up the sequence require "
+		+ "you to specify which channel or channels the command should affect.  "
+		+ "Channels are identified either by a pair of strings "
+		+ "(<device name>, <channel name>), or a single string <device name> "
+		+ "if the device has only one channel of the type needed for the command.")
+public class QubitServer extends AbstractServer {
 
 	private Context wiringContext;
 
@@ -66,15 +60,13 @@ import org.labrad.qubits.resources.Resources;
 						System.out.println("Server connected: " + Constants.GHZ_DAC_SERVER + " -- refreshing wiring.");
 						loadWiringConfiguration();
 					}
-				}
-				else if (e.getContext().equals(wiringContext)) {
+				} else if (e.getContext().equals(wiringContext)) {
 					loadWiringConfiguration();
 				}
 			}
 		});
 		Request req = startRegistryRequest();
-		req.add("Notify on Change", Data.valueOf(wiringContext.getLow()),
-				Data.valueOf(true));
+		req.add("Notify on Change", Data.valueOf(wiringContext.getLow()), Data.valueOf(true));
 		Request req2 = Request.to("Manager", wiringContext);
 		req2.add("Subscribe to Named Message", Data.valueOf("Server Connect"), Data.valueOf(55443322L),
 				Data.valueOf(true));
@@ -106,10 +98,10 @@ import org.labrad.qubits.resources.Resources;
 
 		// load wiring configuration from the registry
 		Request req = startRegistryRequest();
-		req.add("cd", Data.valueOf(Constants.WIRING_PATH),
-				Data.valueOf(true)); // create the directory if needed
-		int idx = req.addRecord("get", Data.valueOf(Constants.WIRING_KEY)); //,
-		// Data.valueOf(Constants.WIRING_TYPE)); // no longer enforcing wiring type ==> cluster fuck!
+		req.add("cd", Data.valueOf(Constants.WIRING_PATH), Data.valueOf(true)); // create the directory if needed
+		int idx = req.addRecord("get", Data.valueOf(Constants.WIRING_KEY)); // ,
+		// Data.valueOf(Constants.WIRING_TYPE)); // no longer enforcing wiring type ==>
+		// cluster fuck!
 		List<Data> ans;
 		try {
 			ans = getConnection().sendAndWait(req);
@@ -121,7 +113,7 @@ import org.labrad.qubits.resources.Resources;
 
 		// create objects for all resources
 		List<Data> resources = ans.get(idx).get(0).getClusterAsList();
-		//List<Data> resources = ans.get(idx).get(0).getDataList();
+		// List<Data> resources = ans.get(idx).get(0).getDataList();
 		List<Data> fibers = ans.get(idx).get(1).getDataList();
 		List<Data> microwaves = ans.get(idx).get(2).getDataList();
 		Resources.updateWiring(resources, fibers, microwaves);
@@ -132,8 +124,9 @@ import org.labrad.qubits.resources.Resources;
 	}
 
 	/**
-	 * we make a BuildLoader for every DAC/ADC board. we run them asynchronously to get build information
-	 * from both the FPGA server and the registry.
+	 * we make a BuildLoader for every DAC/ADC board. we run them asynchronously to
+	 * get build information from both the FPGA server and the registry.
+	 * 
 	 * @author pomalley
 	 *
 	 */
@@ -153,7 +146,7 @@ import org.labrad.qubits.resources.Resources;
 			req.add("Select Device", Data.valueOf(myBoard.getName()));
 			req.add("Build Number");
 			getConnection().send(req, this);
-			//System.out.println("Sent request for board " + myBoard.getName());
+			// System.out.println("Sent request for board " + myBoard.getName());
 		}
 
 		@Override
@@ -177,8 +170,9 @@ import org.labrad.qubits.resources.Resources;
 		public void onFailure(Request request, Throwable cause) {
 			if (!gotBuildNumber) {
 				// we failed to get the build number from the FPGA server
-				System.out.println("Board " + myBoard.getName() + " failed to get build number: " + //cause.getMessage() +
-				" Using default build number (5 for DAC, 1 for ADC).");
+				System.out.println("Board " + myBoard.getName() + " failed to get build number: " + // cause.getMessage()
+																									// +
+						" Using default build number (5 for DAC, 1 for ADC).");
 				myBoard.setBuildNumber("-1");
 				gotBuildNumber = true;
 				// send out a packet to the registry anyway to get the details
@@ -208,14 +202,16 @@ import org.labrad.qubits.resources.Resources;
 
 	/**
 	 * Load the build properties for the ADC and DAC boards.
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * 
+	 * @throws ExecutionException
+	 * @throws InterruptedException
 	 */
 	public void loadBuildProperties() {
 		System.out.println("Load DAC/ADC build properties...");
 		Resources current = Resources.getCurrent();
 		List<DacBoard> dacs = current.getAll(DacBoard.class);
-		// make and start a request to do look up build numbers and properties for each board
+		// make and start a request to do look up build numbers and properties for each
+		// board
 		for (DacBoard board : dacs) {
 			BuildLoader bl = new BuildLoader(board);
 			bl.run();

@@ -16,22 +16,23 @@ public class FpgaModelAdc implements FpgaModel {
 	List<AdcChannel> channels = Lists.newArrayList();
 	AdcBoard board;
 	Experiment expt;
-	
+
 	public FpgaModelAdc(AdcBoard board, Experiment expt) {
 		this.board = board;
 		this.expt = expt;
-		
+
 	}
-	
+
 	public void setChannel(AdcChannel c) {
 		if (!channels.contains(c))
 			channels.add(c);
 	}
+
 	public AdcChannel getChannel() {
 		Preconditions.checkArgument(false, "getChannel() called for FpgaModelAdc! Bad!");
 		return null;
 	}
-	
+
 	@Override
 	public DacBoard getDacBoard() {
 		return board;
@@ -50,5 +51,4 @@ public class FpgaModelAdc implements FpgaModel {
 		}
 	}
 
-	
 }

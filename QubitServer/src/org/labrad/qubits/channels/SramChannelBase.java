@@ -10,44 +10,43 @@ import com.google.common.collect.Maps;
 
 public abstract class SramChannelBase<T> implements Channel {
 
-  String name = null;
-  Experiment expt = null;
-  DacBoard board = null;
-  FpgaModelDac fpga = null;
+	String name = null;
+	Experiment expt = null;
+	DacBoard board = null;
+	FpgaModelDac fpga = null;
 
-  @Override
-  public String getName() {
-    return name;
-  }
+	@Override
+	public String getName() {
+		return name;
+	}
 
-  @Override
-  public Experiment getExperiment() {
-    return expt;
-  }
+	@Override
+	public Experiment getExperiment() {
+		return expt;
+	}
 
-  @Override
-  public void setExperiment(Experiment expt) {
-    this.expt = expt;
-  }
+	@Override
+	public void setExperiment(Experiment expt) {
+		this.expt = expt;
+	}
 
-  @Override
-  public DacBoard getDacBoard() {
-    return board;
-  }
+	@Override
+	public DacBoard getDacBoard() {
+		return board;
+	}
 
-  public void setDacBoard(DacBoard board) {
-    this.board = board;
-  }
+	public void setDacBoard(DacBoard board) {
+		this.board = board;
+	}
 
-  @Override
-  public FpgaModelDac getFpgaModel() {
-    return fpga;
-  }
+	@Override
+	public FpgaModelDac getFpgaModel() {
+		return fpga;
+	}
 
+	//
+	// Blocks
+	//
 
-  //
-  // Blocks
-  //
-
-  Map<String, T> blocks = Maps.newHashMap();
+	Map<String, T> blocks = Maps.newHashMap();
 }
