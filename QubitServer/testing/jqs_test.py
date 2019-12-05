@@ -61,7 +61,7 @@ twoQubitsWithRes = {
 # convert setups with dicts to for suitable for qubit server
 flatten = lambda devs: [(n, list(ch.items())) for n, ch in devs.items()]
 
-def main(cxn):
+with labrad.connect() as cxn:
     qs = cxn.qubit_sequencer
 
     # test out a standard sequence
@@ -279,7 +279,3 @@ def main(cxn):
 
     for s, d in ans['data']:
         print ('%s:' % s), d
-
-if __name__ == '__main__':
-    with labrad.connect() as cxn:
-        main(cxn)

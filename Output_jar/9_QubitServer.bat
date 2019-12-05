@@ -1,0 +1,1 @@
+"D:\Java8\bin\java" -jar QubitServer.jar
