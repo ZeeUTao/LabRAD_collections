@@ -1,1 +1,1 @@
-"D:\Java\bin\java" -jar QubitServer.jar
+"D:\Java8\bin\java" -jar QubitServer.jar
